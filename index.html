@@ -143,16 +143,17 @@
             transform: translateY(-5px);
         }
 
-        /* UPDATED LOGO STYLING - Added border and padding */
+        /* UPDATED LOGO STYLING - Border applied directly to image */
         .project-logo {
             width: 50px;
             height: 50px;
             float: right;
-            border-radius: 8px; /* Slightly rounded corners */
+            border: 1px solid var(--accent); /* The gold border */
+            border-radius: 10px;             /* Rounded corners */
+            padding: 5px;                    /* Gap between image and border */
             background: transparent;
-            padding: 5px; /* Space between logo and border */
-            border: 1px solid rgba(212, 175, 55, 0.4); /* Gold border */
             object-fit: contain;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.15); /* Subtle glow */
             mix-blend-mode: lighten; 
         }
 
