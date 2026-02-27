@@ -143,17 +143,16 @@
             transform: translateY(-5px);
         }
 
-        /* UPDATED LOGO STYLING - Removed background and border */
+        /* UPDATED LOGO STYLING - Added border and padding */
         .project-logo {
-            width: 55px;
-            height: 55px;
+            width: 50px;
+            height: 50px;
             float: right;
-            border-radius: 0;
-            background: transparent; /* Removed white background */
-            padding: 0;
+            border-radius: 8px; /* Slightly rounded corners */
+            background: transparent;
+            padding: 5px; /* Space between logo and border */
+            border: 1px solid rgba(212, 175, 55, 0.4); /* Gold border */
             object-fit: contain;
-            /* Optional: if your logo has a white background, the line below helps blend it, 
-               but it's best to use a transparent PNG */
             mix-blend-mode: lighten; 
         }
 
