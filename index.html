@@ -30,7 +30,8 @@
 
         #bg-canvas {
             position: fixed;
-            top: 0; left: 0;
+            top: 0;
+            left: 0;
             z-index: -1;
             opacity: 0.3;
         }
@@ -39,12 +40,6 @@
             max-width: 1100px;
             margin: 0 auto;
             padding: 60px 25px;
-        }
-
-        /* Blur the rest of the page ONLY when hovering the AI photo */
-        body:has(.ai-zoom-photo:hover) .wrapper > *:not(.ai-zoom-photo:hover) {
-            filter: blur(4px);
-            opacity: 0.6;
         }
 
         .reveal {
@@ -58,27 +53,82 @@
             transform: translateY(0);
         }
 
-        header { text-align: center; margin-bottom: 80px; }
+        header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
 
         .profile-img {
-            width: 150px; height: 150px;
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
             border: 2px solid var(--accent);
             margin-bottom: 20px;
             object-fit: cover;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
         }
 
         h1 {
             font-family: 'Playfair Display', serif;
             font-size: clamp(2.5rem, 8vw, 4.5rem);
+            letter-spacing: 4px;
+            margin-bottom: 10px;
             color: var(--accent);
             text-transform: uppercase;
+        }
+
+        .tagline {
+            color: var(--text-dim);
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+
+        .contact-bar {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+            padding: 8px 16px;
+            border-radius: 50px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid transparent;
+        }
+
+        .social-link:hover {
+            color: var(--accent);
+            border-color: var(--accent);
+            background: rgba(212, 175, 55, 0.1);
         }
 
         .cv-grid {
             display: grid;
             grid-template-columns: 1.3fr 0.7fr;
             gap: 50px;
+        }
+
+        section { margin-bottom: 50px; }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--accent);
+            border-bottom: var(--glass-border);
+            padding-bottom: 10px;
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
         .exp-item {
@@ -89,40 +139,101 @@
             border-radius: 12px;
             margin-bottom: 25px;
             transition: 0.3s ease;
+            overflow: visible; /* Changed to allow image zoom to escape box */
         }
 
-        /* --- AI PHOTO SPECIFIC STYLING --- */
-        .ai-photo-container {
+        .exp-item:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+        }
+
+        /* --- Project Image Zoom Logic --- */
+        .project-img-container {
             float: right;
             margin-left: 15px;
             position: relative;
         }
 
-        .ai-zoom-photo {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
+        .project-img-zoom {
+            width: 70px;
+            height: 70px;
             border-radius: 8px;
             border: 1px solid var(--accent);
+            object-fit: cover;
             cursor: pointer;
-            transition: transform 0.5s ease, box-shadow 0.5s ease;
-            transform-origin: top right; /* Makes it grow from its position, not the center */
-            position: relative;
-            z-index: 5;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .ai-zoom-photo:hover {
-            transform: scale(4); /* Grows 4x larger right where it is */
-            z-index: 100;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-            border-color: #fff;
+        .project-img-zoom:hover {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(6); /* Centers and enlarges */
+            z-index: 1000;
+            box-shadow: 0 0 50px rgba(0,0,0,0.9);
+            border-width: 0.5px;
+        }
+
+        /* Darken background when image is zoomed */
+        .project-img-container::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.5s;
+            z-index: 999;
+        }
+        .project-img-container:hover::before {
+            opacity: 1;
+        }
+        /* -------------------------------- */
+
+        .project-logo {
+            width: 50px;
+            height: 50px;
+            float: right;
+            border: 1px solid var(--accent);
+            border-radius: 10px;              
+            padding: 5px;                    
+            background: transparent;
+            object-fit: contain;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.15);
+            mix-blend-mode: lighten; 
+        }
+
+        .company-logo {
+            width: 40px;
+            height: 40px;
+            float: right;
+            object-fit: contain;
+            filter: grayscale(1) brightness(2);
+            opacity: 0.7;
         }
 
         .role { font-weight: 600; font-size: 1.1rem; color: #fff; display: block; }
         .company { color: var(--accent); font-weight: 400; font-size: 1rem; }
-        .desc { font-size: 0.9rem; color: var(--text-dim); margin-top: 10px; }
+        .date { font-family: monospace; color: var(--text-dim); font-size: 0.8rem; display: block; margin: 4px 0 12px 0; }
 
-        .tag-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
+        .desc {
+            list-style: none;
+            padding: 0;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            margin: 0;
+        }
+
+        .desc li { margin-bottom: 8px; position: relative; padding-left: 18px; }
+        .desc li::before { content: "•"; position: absolute; left: 0; color: var(--accent); }
+
+        .tag-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+
         .tag {
             background: rgba(212, 175, 55, 0.08);
             border: 1px solid rgba(212, 175, 55, 0.2);
@@ -132,62 +243,157 @@
             color: #eee;
         }
 
-        .social-link {
-            color: var(--text-main);
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 50px;
-            background: rgba(255,255,255,0.05);
-            font-size: 0.85rem;
+        .lang-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            color: var(--text-dim);
         }
 
-        @media (max-width: 900px) { .cv-grid { grid-template-columns: 1fr; } }
+        .download-cv {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--accent);
+            color: #000;
+            padding: 12px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+            transition: 0.3s;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .download-cv:hover {
+            transform: scale(1.05);
+            background: #e5c158;
+        }
+
+        @media (max-width: 900px) {
+            .cv-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
 
     <canvas id="bg-canvas"></canvas>
 
+    <a href="Mohaned Medhat Adli.pdf" class="download-cv" download="Mohaned Medhat Adli.pdf">
+        <i class="fas fa-file-download"></i> Download CV
+    </a>
+
     <div class="wrapper">
         <header class="reveal">
             <img src="mohaned.png" alt="Mohaned Medhat Adli" class="profile-img" onerror="this.src='https://via.placeholder.com/150'">
             <h1>Mohanad Medhat Adli</h1>
+            <div class="tagline">Business Development Engineer</div>
+            
             <div class="contact-bar">
-                <a href="#" class="social-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                <a href="https://www.linkedin.com/in/mohanedmedhat/" target="_blank" class="social-link">
+                    <i class="fab fa-linkedin"></i> LinkedIn
+                </a>
+                <a href="mailto:mmohaned101@gmail.com" class="social-link">
+                    <i class="fas fa-envelope"></i> mmohaned101@gmail.com
+                </a>
                 <span class="social-link"><i class="fas fa-phone"></i> +201020249513</span>
             </div>
         </header>
 
+        <section class="reveal">
+            <h2>Summary</h2>
+            <p style="color: var(--text-dim); font-size: 1rem; line-height: 1.7;">
+                Results-driven professional with a background in Computer Engineering and a proven track record in high-level B2B sales and partnership development. Expert at leveraging data-driven insights and AI-driven platforms to identify market opportunities and scale institutional networks. A strategic communicator skilled at bridging the gap between technical solutions and business growth to deliver measurable ROI.
+            </p>
+        </section>
+
         <div class="cv-grid">
             <div class="main-col">
+                <section class="reveal">
+                    <h2>Work Experience</h2>
+
+                    <div class="exp-item">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Educatly_Logo.png/200px-Educatly_Logo.png" class="company-logo" alt="Educatly" onerror="this.style.display='none'">
+                        <span class="role">Sales Development Representative</span>
+                        <span class="company">Educatly</span>
+                        <span class="date">Dec, 2025 — Present</span>
+                        <ul class="desc">
+                            <li>Secured B2B partnerships by pitching Educatly's AI platform to global university deans and directors.</li>
+                            <li>Managed full sales funnel, qualifying institutional leads to drive strategic academic growth.</li>
+                            <li>Exceeded outreach targets by aligning university recruitment goals with data-driven solutions.</li>
+                        </ul>
+                    </div>
+
+                    <div class="exp-item">
+                        <span class="role">Data Analyst</span>
+                        <span class="company">Freelance</span>
+                        <span class="date">Jun, 2024 — Nov, 2025</span>
+                        <ul class="desc">
+                            <li>Built interactive dashboards using Tableau, Excel, and Google Sheets to present complex data clearly.</li>
+                            <li>Employed SQL and database management to streamline data extraction and reporting processes.</li>
+                            <li>Developed strong skills in data cleaning and analysis, ensuring high-quality insights for clients.</li>
+                        </ul>
+                    </div>
+
+                    <div class="exp-item">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/AIESEC_logo.svg/1200px-AIESEC_logo.svg.png" class="company-logo" alt="AIESEC" onerror="this.style.display='none'">
+                        <span class="role">Manager of Global Exchange Department</span>
+                        <span class="company">AIESEC in Egypt</span>
+                        <span class="date">Feb, 2025 — Dec, 2025</span>
+                        <ul class="desc">
+                            <li>Led the Outgoing Global Volunteer program, managing 30+ Team Leaders and members.</li>
+                            <li>Provided coaching and mentorship to Team Leaders to support effective team management.</li>
+                            <li>Analyzed operational and program data to optimize processes and enhance overall performance.</li>
+                        </ul>
+                    </div>
+                </section>
+
                 <section class="reveal">
                     <h2>Key Projects</h2>
 
                     <div class="exp-item">
-                        <div class="ai-photo-container">
-                            <img src="ai.jpeg" class="ai-zoom-photo" alt="AI Personal Trainer" onerror="this.src='https://via.placeholder.com/80'">
+                        <div class="project-img-container">
+                            <img src="ai.jpeg" class="project-img-zoom" alt="AI Trainer" onerror="this.style.display='none'">
                         </div>
                         <span class="role">AI Personal Trainer</span>
-                        <span class="company">Lead Developer</span>
+                        <span class="company">Computer Vision & AI</span>
                         
-                        <p class="desc">
-                            Developing a personal trainer using computer vision and AI to detect workouts. 
-                            Includes a live coach AI that tells you what to do right or wrong with integrated sound.
+                        <p class="desc" style="margin-top:10px;">
+                            Building a next-generation fitness assistant using computer vision and AI to detect real-time workout movements. Features a "Live Coach" AI that provides instant audio feedback to correct form, count reps, and guide users through exercises with high precision.
                         </p>
-
-                        <div class="tag-group">
+                        <div class="tag-group" style="margin-top: 15px; margin-bottom: 0;">
                             <div class="tag">Computer Vision</div>
-                            <div class="tag">AI Coaching</div>
-                            <div class="tag">OpenCV</div>
+                            <div class="tag">AI Audio Feedback</div>
+                            <div class="tag">Pose Estimation</div>
+                            <div class="tag">Python</div>
+                        </div>
+                    </div>
+
+                    <div class="exp-item">
+                        <img src="ihire.png" class="project-logo" alt="iHire Logo">
+                        <span class="role">iHire: Data-Driven Recruitment Model</span>
+                        <span class="company">Project Lead</span>
+                        <p class="desc" style="margin-top:10px;">iHire is a strategic initiative focused on building a data-driven, quality-first recruitment model using advanced data analytics to match candidates with growth-stage companies.</p>
+                        <div class="tag-group" style="margin-top: 15px; margin-bottom: 0;">
+                            <div class="tag">Data Analytics</div>
+                            <div class="tag">Talent Acquisition</div>
+                            <div class="tag">Lead Generation</div>
                         </div>
                     </div>
 
                     <div class="exp-item">
                         <span class="role">AI Lead Generation System</span>
-                        <p class="desc">Intelligent lead generation engine utilizing AI to qualify B2B prospects.</p>
-                        <div class="tag-group">
+                        <span class="company">In Development</span>
+                        <p class="desc" style="margin-top:10px;">Developing an intelligent lead generation engine utilizing AI to scrape, qualify, and categorize high-intent B2B prospects.</p>
+                        <div class="tag-group" style="margin-top: 15px; margin-bottom: 0;">
                             <div class="tag">AI/ML</div>
                             <div class="tag">Automation</div>
+                            <div class="tag">B2B Strategy</div>
                         </div>
                     </div>
                 </section>
@@ -195,54 +401,138 @@
 
             <div class="side-col">
                 <section class="reveal">
-                    <h2>Tech Stack</h2>
+                    <h2>Technical Tech Stack</h2>
                     <div class="tag-group">
+                        <div class="tag">SQL / MySQL</div>
                         <div class="tag">Python</div>
-                        <div class="tag">SQL</div>
+                        <div class="tag">C++</div>
                         <div class="tag">Computer Vision</div>
+                        <div class="tag">Power BI</div>
+                        <div class="tag">Tableau</div>
+                        <div class="tag">Excel</div>
                     </div>
+
+                    <h2>Business & Ops</h2>
+                    <div class="tag-group">
+                        <div class="tag">B2B Sales Strategy</div>
+                        <div class="tag">Strategic Partnerships</div>
+                        <div class="tag">CRM Management</div>
+                        <div class="tag">Market Research</div>
+                    </div>
+                </section>
+
+                <section class="reveal">
+                    <h2>Education</h2>
+                    <div class="exp-item" style="padding: 15px;">
+                        <span class="role" style="font-size: 0.95rem;">B.E. Computer Software Engineering</span>
+                        <span class="company" style="font-size: 0.85rem;">Misr University for Science and Technology</span>
+                        <span class="date">Sep, 2021 — 2026</span>
+                    </div>
+                </section>
+
+                <section class="reveal">
+                    <h2>Soft Skills</h2>
+                    <div class="tag-group">
+                        <div class="tag">Leadership</div>
+                        <div class="tag">Public Speaking</div>
+                        <div class="tag">Problem Solving</div>
+                        <div class="tag">Team Management</div>
+                    </div>
+                </section>
+
+                <section class="reveal">
+                    <h2>Languages</h2>
+                    <div class="lang-item"><span>English</span> <span>Fluent</span></div>
+                    <div class="lang-item"><span>Arabic</span> <span>Native</span></div>
+                </section>
+
+                <section class="reveal">
+                    <h2>Certifications</h2>
+                    <ul class="desc" style="font-size: 0.85rem;">
+                        <li>CS50 Python</li>
+                        <li>MySQL Bootcamp</li>
+                        <li>Data Analysis (SQL/Power BI)</li>
+                    </ul>
                 </section>
             </div>
         </div>
+
+        <footer class="reveal" style="text-align: center; margin-top: 40px; border-top: var(--glass-border); padding-top: 20px; color: var(--text-dim); font-size: 0.8rem;">
+            &copy; 2026 Mohaned Medhat Adli
+        </footer>
     </div>
 
     <script>
-        // Simple particles background logic
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
+        let mouse = { x: null, y: null };
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+        });
+
         function init() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            for(let i=0; i<50; i++) {
+            particles = [];
+            const particleCount = Math.min(80, (canvas.width * canvas.height) / 15000);
+            for(let i=0; i<particleCount; i++) {
                 particles.push({
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height,
-                    vx: (Math.random() - 0.5) * 0.2,
-                    vy: (Math.random() - 0.5) * 0.2,
-                    size: 1
+                    vx: (Math.random() - 0.5) * 0.3,
+                    vy: (Math.random() - 0.5) * 0.3,
+                    size: Math.random() * 1.5
                 });
             }
         }
+
         function draw() {
-            ctx.clearRect(0,0,canvas.width, canvas.height);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#d4af37';
-            particles.forEach(p => {
+            particles.forEach((p, i) => {
                 p.x += p.vx; p.y += p.vy;
-                if(p.x<0 || p.x>canvas.width) p.vx*=-1;
-                if(p.y<0 || p.y>canvas.height) p.vy*=-1;
+
+                let dx = mouse.x - p.x;
+                let dy = mouse.y - p.y;
+                let distMouse = Math.sqrt(dx*dx + dy*dy);
+                if(distMouse < 100) {
+                    p.x -= dx/20;
+                    p.y -= dy/20;
+                }
+
+                if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
+                
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
                 ctx.fill();
+                for(let j=i+1; j<particles.length; j++) {
+                    const p2 = particles[j];
+                    const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                    if(dist < 120) {
+                        ctx.strokeStyle = `rgba(212, 175, 55, ${0.15 * (1 - dist/120)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
             });
             requestAnimationFrame(draw);
         }
+
         function reveal() {
             document.querySelectorAll('.reveal').forEach(el => {
                 if(el.getBoundingClientRect().top < window.innerHeight - 50) el.classList.add('active');
             });
         }
+
         window.addEventListener('scroll', reveal);
+        window.addEventListener('resize', init);
         init(); draw(); reveal();
     </script>
 </body>
