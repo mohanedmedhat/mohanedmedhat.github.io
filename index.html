@@ -6,17 +6,18 @@
     <title>Mohanad's Portfolio</title>
     
     <link rel="icon" type="image/png" href="gow.png">
-
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
         :root {
-            --bg-color: #070707;
+            --bg-color: #050505;
             --card-bg: rgba(15, 15, 15, 0.9);
-            --accent: #d4af37; 
+            --accent: #00d4ff; /* Changed from yellow to Electric Cyan */
+            --accent-glow: rgba(0, 212, 255, 0.3);
             --text-main: #ffffff;
             --text-dim: #b0b0b0;
-            --glass-border: 1px solid rgba(212, 175, 55, 0.25);
+            --glass-border: 1px solid rgba(0, 212, 255, 0.2);
         }
 
         body {
@@ -33,7 +34,7 @@
             top: 0;
             left: 0;
             z-index: -1;
-            opacity: 0.3;
+            opacity: 0.4;
         }
 
         .wrapper {
@@ -65,7 +66,7 @@
             border: 2px solid var(--accent);
             margin-bottom: 20px;
             object-fit: cover;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+            box-shadow: 0 0 25px var(--accent-glow);
         }
 
         h1 {
@@ -75,6 +76,7 @@
             margin-bottom: 10px;
             color: var(--accent);
             text-transform: uppercase;
+            text-shadow: 0 0 15px var(--accent-glow);
         }
 
         .tagline {
@@ -109,7 +111,8 @@
         .social-link:hover {
             color: var(--accent);
             border-color: var(--accent);
-            background: rgba(212, 175, 55, 0.1);
+            background: rgba(0, 212, 255, 0.08);
+            box-shadow: 0 0 15px var(--accent-glow);
         }
 
         .cv-grid {
@@ -144,6 +147,7 @@
         .exp-item:hover {
             border-color: var(--accent);
             transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
         .project-logo {
@@ -151,11 +155,11 @@
             height: 50px;
             float: right;
             border: 1px solid var(--accent);
-            border-radius: 10px;             
+            border-radius: 10px;              
             padding: 5px;                    
             background: transparent;
             object-fit: contain;
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.15);
+            box-shadow: 0 0 10px var(--accent-glow);
             mix-blend-mode: lighten; 
         }
 
@@ -164,8 +168,8 @@
             height: 40px;
             float: right;
             object-fit: contain;
-            filter: grayscale(1) brightness(2);
-            opacity: 0.7;
+            filter: grayscale(1) brightness(3);
+            opacity: 0.8;
         }
 
         .role { font-weight: 600; font-size: 1.1rem; color: #fff; display: block; }
@@ -191,8 +195,8 @@
         }
 
         .tag {
-            background: rgba(212, 175, 55, 0.08);
-            border: 1px solid rgba(212, 175, 55, 0.2);
+            background: rgba(0, 212, 255, 0.08);
+            border: 1px solid rgba(0, 212, 255, 0.2);
             padding: 5px 12px;
             border-radius: 4px;
             font-size: 0.75rem;
@@ -218,7 +222,7 @@
             text-decoration: none;
             font-weight: 600;
             font-size: 0.9rem;
-            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+            box-shadow: 0 5px 20px var(--accent-glow);
             transition: 0.3s;
             z-index: 100;
             display: flex;
@@ -227,8 +231,9 @@
         }
 
         .download-cv:hover {
-            transform: scale(1.05);
-            background: #e5c158;
+            transform: scale(1.05) translateY(-3px);
+            background: #ffffff;
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2);
         }
 
         @media (max-width: 900px) {
@@ -429,7 +434,7 @@
 
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#d4af37';
+            ctx.fillStyle = '#00d4ff'; /* Particle color updated to Cyan */
             particles.forEach((p, i) => {
                 p.x += p.vx; p.y += p.vy;
 
@@ -451,7 +456,7 @@
                     const p2 = particles[j];
                     const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
                     if(dist < 120) {
-                        ctx.strokeStyle = `rgba(212, 175, 55, ${0.15 * (1 - dist/120)})`;
+                        ctx.strokeStyle = `rgba(0, 212, 255, ${0.15 * (1 - dist/120)})`; /* Line color updated to Cyan */
                         ctx.lineWidth = 0.5;
                         ctx.beginPath();
                         ctx.moveTo(p.x, p.y);
